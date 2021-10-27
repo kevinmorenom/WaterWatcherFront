@@ -8,7 +8,6 @@ export default function Navbar() {
   const isLoggedIn = authCtx.isLoggedIn;
 
   const logoutHandler = () => {
-    console.log("loging out");
     authCtx.logout();
   };
   return (

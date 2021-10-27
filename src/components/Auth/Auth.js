@@ -2,16 +2,18 @@ import React, { useState, useRef, useContext } from "react";
 import classes from "./Auth.module.css";
 import AuthContext from "../../store/auth-context";
 import { useHistory } from "react-router";
+import useInput from "../../hooks/use-input";
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
-  const nameRef = useRef();
-  const emailRef = useRef();
-  const passwordRef = useRef();
-  const telephoneRef = useRef();
+  const nameHook = useInput((value) => value.trim() === "");
+  const emailHook = useInput((value) => !value.includes("@"));
+  const passwordHook = useInput((value) => value.trim().length === 0);
+  const telephoneHook = useInput((value) => {
+    return value.trim().length < 10 || value.trim().length > 10;
+  });
 
   const history = useHistory();
-
   const authCtx = useContext(AuthContext);
 
   const switchAuthModeHandler = () => {
@@ -28,14 +30,32 @@ export default function Auth() {
   };
 
   const clearInputs = () => {
-    nameRef.current.value = "";
-    passwordRef.current.value = "";
-    telephoneRef.current.value = "";
+    nameHook.reset();
+    passwordHook.reset();
+    telephoneHook.reset();
+    emailHook.reset();
   };
+
+  let RegisterformIsInvalid =
+    nameHook.isInvalid ||
+    emailHook.isInvalid ||
+    passwordHook.isInvalid ||
+    telephoneHook.isInvalid;
+
+  let LoginformIsInvalid = emailHook.isInvalid || passwordHook.isInvalid;
+
+  const isBtnDisabled = isLogin
+    ? LoginformIsInvalid
+      ? true
+      : false
+    : RegisterformIsInvalid
+    ? true
+    : false;
+
   const LoginHandler = () => {
     let credentials = {
-      password: passwordRef.current.value,
-      email: emailRef.current.value,
+      password: passwordHook.value,
+      email: emailHook.value,
     };
     fetch("https://waterwatcher-back.herokuapp.com/api/users/login", {
       method: "POST",
@@ -53,10 +73,10 @@ export default function Auth() {
 
   const RegisterHandler = () => {
     let credentials = {
-      name: nameRef.current.value,
-      password: passwordRef.current.value,
-      email: emailRef.current.value,
-      telephone: telephoneRef.current.value,
+      name: nameHook.value,
+      password: passwordHook.value,
+      email: emailHook.value,
+      telephone: telephoneHook.value,
     };
     fetch("https://waterwatcher-back.herokuapp.com/api/users/signup", {
       method: "POST",
@@ -84,30 +104,61 @@ export default function Auth() {
           {!isLogin && (
             <div className={classes.control}>
               <label htmlFor="name">Your Name</label>
-              <input ref={nameRef} type="text" id="name" required />
+              <input
+                value={nameHook.value}
+                onChange={nameHook.ChangeHandler}
+                onBlur={nameHook.BlurHandler}
+                type="text"
+                id="name"
+                required
+              />
+              {nameHook.isInvalid && (
+                <p className={classes.errorText}>Name should not be empty**</p>
+              )}
             </div>
           )}
           <div className={classes.control}>
             <label htmlFor="email">Email</label>
-            <input ref={emailRef} type="email" id="email" required />
+            <input
+              value={emailHook.value}
+              onChange={emailHook.ChangeHandler}
+              onBlur={emailHook.BlurHandler}
+              type="email"
+              id="email"
+              required
+            />
+            {emailHook.isInvalid && (
+              <p className={classes.errorText}>Please enter a valid email**</p>
+            )}
           </div>
           <div className={classes.control}>
             <label htmlFor="password">Password</label>
-            <input ref={passwordRef} type="password" id="password" required />
+            <input 
+            value={passwordHook.value}
+            onChange={passwordHook.ChangeHandler}
+            onBlur={passwordHook.BlurHandler}
+            type="password" id="password" required />
+            {passwordHook.isInvalid && (
+              <p className={classes.errorText}>Password should not be empty**</p>
+            )}
           </div>
           {!isLogin && (
             <div className={classes.control}>
               <label htmlFor="telephone">Telephone</label>
-              <input
-                ref={telephoneRef}
-                type="telephone"
-                id="telephone"
-                required
-              />
+              <input 
+              value={telephoneHook.value}
+              onChange={telephoneHook.ChangeHandler}
+              onBlur={telephoneHook.BlurHandler}
+              type="telephone" id="telephone" required />
+              {telephoneHook.isInvalid && (
+              <p className={classes.errorText}>Telephone should be 10 characters long**</p>
+            )}
             </div>
           )}
           <div className={classes.actions}>
-            <button>{isLogin ? "Login" : "Create Account"}</button>
+            <button disabled={isBtnDisabled}>
+              {isLogin ? "Login" : "Create Account"}
+            </button>
             <button
               type="button"
               className={classes.toggle}
