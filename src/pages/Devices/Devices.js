@@ -25,7 +25,8 @@ export default function Devices() {
       throw new Error(data.message || "Could not get alerts.");
     }
     setDevices(data.data);
-    setIsLoading(false);
+    setTimeout(()=>{setIsLoading(false)},200)
+    
   }
 
   useEffect(() => {

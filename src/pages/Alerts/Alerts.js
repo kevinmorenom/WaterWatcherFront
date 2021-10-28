@@ -25,7 +25,7 @@ export default function Alerts() {
       throw new Error(data.message || "Could not get alerts.");
     }
     setAlerts(data.alerts);
-    setIsLoading(false);
+    setTimeout(()=>{setIsLoading(false)},200)
   }
 
   useEffect(() => {
