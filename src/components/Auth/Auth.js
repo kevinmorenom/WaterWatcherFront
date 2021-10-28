@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from "react";
+import React, { useState, useContext } from "react";
 import classes from "./Auth.module.css";
 import AuthContext from "../../store/auth-context";
 import { useHistory } from "react-router";
@@ -133,26 +133,36 @@ export default function Auth() {
           </div>
           <div className={classes.control}>
             <label htmlFor="password">Password</label>
-            <input 
-            value={passwordHook.value}
-            onChange={passwordHook.ChangeHandler}
-            onBlur={passwordHook.BlurHandler}
-            type="password" id="password" required />
+            <input
+              value={passwordHook.value}
+              onChange={passwordHook.ChangeHandler}
+              onBlur={passwordHook.BlurHandler}
+              type="password"
+              id="password"
+              required
+            />
             {passwordHook.isInvalid && (
-              <p className={classes.errorText}>Password should not be empty**</p>
+              <p className={classes.errorText}>
+                Password should not be empty**
+              </p>
             )}
           </div>
           {!isLogin && (
             <div className={classes.control}>
               <label htmlFor="telephone">Telephone</label>
-              <input 
-              value={telephoneHook.value}
-              onChange={telephoneHook.ChangeHandler}
-              onBlur={telephoneHook.BlurHandler}
-              type="telephone" id="telephone" required />
+              <input
+                value={telephoneHook.value}
+                onChange={telephoneHook.ChangeHandler}
+                onBlur={telephoneHook.BlurHandler}
+                type="telephone"
+                id="telephone"
+                required
+              />
               {telephoneHook.isInvalid && (
-              <p className={classes.errorText}>Telephone should be 10 characters long**</p>
-            )}
+                <p className={classes.errorText}>
+                  Telephone should be 10 characters long**
+                </p>
+              )}
             </div>
           )}
           <div className={classes.actions}>
