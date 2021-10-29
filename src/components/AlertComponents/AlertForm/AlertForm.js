@@ -9,7 +9,6 @@ export default function AlertForm(props) {
   const authCtx = useContext(AuthContext);
   const devices = authCtx.userDevices;
   const currentUser= authCtx.currentUser;
-  console.log(currentUser);
   const IsEmpty = (value) => {
     return value.trim() === "";
   };

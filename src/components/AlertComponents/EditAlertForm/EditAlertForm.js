@@ -7,7 +7,7 @@ export default function EditAlertForm({ alert, onCancel, onSave }) {
   const isSchedule = alert.type.toLowerCase() === "schedule" ? true : false;
   const authCtx = useContext(AuthContext);
   const currentUser= authCtx.currentUser;
-  console.log(currentUser);
+  
 
   const IsEmpty = (value) => {
     return false;

@@ -4,7 +4,7 @@ import {FaEdit} from "react-icons/fa";
 import {FaRegTrashAlt} from "react-icons/fa";
 
 export default function AlertCard({ alert,onEdit,onDelete}) {
-  console.log(alert);
+  
 
   const editHandler=()=>{
     onEdit(alert);

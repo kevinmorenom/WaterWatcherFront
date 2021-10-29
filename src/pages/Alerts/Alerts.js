@@ -53,7 +53,6 @@ export default function Alerts() {
         setIsLoading(false);
       }, 200);
     } catch {
-      console.log("Error");
       alert("Something went wrong");
       setError(true);
       setIsLoading(false);
@@ -104,7 +103,7 @@ export default function Alerts() {
       try{
 
       } catch{
-        
+
       }
     const response = await fetch(updateURL, {
       method: "PUT",
