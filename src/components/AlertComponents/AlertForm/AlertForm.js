@@ -70,7 +70,9 @@ export default function AlertForm(props) {
     props.onSave(isSchedule ? ScheduleAlert : VolumeAlert);
   };
 
-  let insideForm = !props.devices? (<p>Please add a Device first</p>): (
+  console.log(props.devices.length);
+
+  let insideForm = (props.devices.length === 0) ? (<p>Please add a Device first</p>): (
     <form onSubmit={submitHandler}>
     <div className={classes.control}>
       <label htmlFor="cars">Alert Type:</label>
@@ -125,6 +127,9 @@ export default function AlertForm(props) {
             type="number"
             required
           />
+          {periodQuantityHook.isInvalid && (
+            <p className={classes.errorText}>Invalid value**</p>
+          )}
         </div>
         <div className={classes.control}>
           <label htmlFor="name">Your Name</label>

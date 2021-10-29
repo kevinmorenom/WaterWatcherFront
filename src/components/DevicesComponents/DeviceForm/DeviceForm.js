@@ -18,6 +18,9 @@ export default function DeviceForm(props) {
     });
   };
 
+  let formIsInvalid = nameHook.isInvalid || serialHook.isInvalid;
+
+
   return (
     <div>
       {/* <section className={classes.auth}> */}
@@ -31,6 +34,9 @@ export default function DeviceForm(props) {
             type="text"
             required
           />
+          {nameHook.isInvalid && (
+                <p className={classes.errorText}>Name should not be empty**</p>
+              )}
         </div>
         <div className={classes.control}>
           <label htmlFor="name">Serial Number</label>
@@ -41,13 +47,16 @@ export default function DeviceForm(props) {
             type="text"
             required
           />
+          {serialHook.isInvalid && (
+                <p className={classes.errorText}>Serial number should not be empty**</p>
+              )}
         </div>
         <div className={classes.actions}>
           <div className={classes.formFlex}>
             <button className={classes.control} onClick={props.onCancel}>
               Cancel
             </button>
-            <button className={classes.control}>Save</button>
+            <button  disabled={formIsInvalid} className={classes.control}>Save</button>
           </div>
         </div>
       </form>
