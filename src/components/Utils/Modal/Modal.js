@@ -1,6 +1,6 @@
 import React from "react";
 import classes from "./Modal.module.css";
-import ReactDOM from 'react-dom';
+
 import reactDom from "react-dom";
 
 const Backdrop = (props) => {
@@ -8,17 +8,16 @@ const Backdrop = (props) => {
 };
 
 const ModalOverlay = (props) => {
+
+
   return (
     <div className={`${classes.card} ${classes.modal}`} >
       <header className={classes.header}>
         <h2>{props.title}</h2>
       </header>
       <div className={classes.content}>
-        <p>{props.children}</p>
+       {props.children}
       </div>
-      <footer className={classes.actions}>
-        <button onClick={props.onConfirm} >Okay</button>
-      </footer>
     </div>
   );
 };

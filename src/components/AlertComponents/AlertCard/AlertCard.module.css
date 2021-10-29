@@ -21,6 +21,7 @@
   display: flex;
   flex-wrap: nowrap;
   padding: 25px;
+  /* padding-right: 5px; */
   padding-bottom: 0px;
   flex-direction: row;
 }
@@ -39,9 +40,14 @@
 }
 
 .actions{
-    flex: 2;
-    display:flex;
-    justify-content: flex-end;
+  /* flex: 2;
+  display:flex;
+  justify-content: flex-end; */
+  display:flex;
+  flex:2;
+  align-items:flex-start;
+  justify-content: right;
+ 
 
 }
 
@@ -49,11 +55,21 @@
     cursor: pointer;
     font: inherit;
     color: white;
-    background-color: rgb(38, 38, 117);
     border: 0px solid white;
     border-radius: 4px;
-    padding: 0rem 1rem;
-    
+    padding: 5px;
+    margin-right:5px;
+}
+
+.edit {
+  background-color: rgb(38, 38, 117);
+
+}
+
+.delete{
+  background-color: rgb(211, 94, 94);
+
+
 }
 
 .timeLabels{

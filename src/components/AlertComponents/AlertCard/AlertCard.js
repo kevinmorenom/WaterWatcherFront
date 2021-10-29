@@ -1,8 +1,17 @@
 import React from "react";
 import classes from "./AlertCard.module.css";
 import {FaEdit} from "react-icons/fa";
+import {FaRegTrashAlt} from "react-icons/fa";
 
-export default function AlertCard({ alert }) {
+export default function AlertCard({ alert,onEdit,onDelete}) {
+  console.log(alert);
+
+  const editHandler=()=>{
+    onEdit(alert);
+  }
+  const deleteHandler=()=>{
+    onDelete(alert._id);
+  }
   
   const img_url =
     alert.type.toLowerCase() === "schedule"
@@ -14,13 +23,15 @@ export default function AlertCard({ alert }) {
         <div className={classes.card_up}>
           <div className={classes.card_mainData}>
             <div className={classes.card_image}>
-              <img src={img_url}></img>
+              <img alt='broken' src={img_url}></img>
             </div>
             <div className={classes.card_title}>
               <p id={classes.name}>{alert.name} </p>
             </div>
             <div className={classes.actions}>
-                    <button><FaEdit></FaEdit></button>
+                    <button className={classes.edit} onClick={editHandler}><FaEdit></FaEdit></button>
+                    <button className={classes.delete} onClick={deleteHandler}><FaRegTrashAlt></FaRegTrashAlt></button>
+
             </div>
           </div>
           <div className={classes.card_description}>
@@ -42,11 +53,17 @@ export default function AlertCard({ alert }) {
                   {" "}
                   <div>
                     <p className={classes.label}>From: </p>
-                    {alert.range.start.hour < 10 && '0'}{alert.range.start.hour}:{alert.range.start.minute < 10 && '0'}{alert.range.start.minute}
+                    {/* {alert.range.start.hour < 10 && '0'} */}
+                    {alert.range.start.hour}:
+                    {/* {alert.range.start.minute < 10 && '0'} */}
+                    {alert.range.start.minute}
                   </div>
                   <div>
                     <p className={classes.label}>To: </p>
-                    {alert.range.end.hour < 10 && '0'}{alert.range.end.hour}:{alert.range.end.minute < 10 && '0'}{alert.range.end.minute}
+                    {/* {alert.range.end.hour < 10 && '0'} */}
+                    {alert.range.end.hour}:
+                    {/* {alert.range.end.minute < 10 && '0'} */}
+                    {alert.range.end.minute}
                   </div>
                 </div>
               )}

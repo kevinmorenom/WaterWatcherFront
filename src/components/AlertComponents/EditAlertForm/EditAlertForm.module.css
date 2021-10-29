@@ -8,13 +8,13 @@
     padding: 1rem;
     text-align: start;
   }
-
-
-
+  
+  
+  
   .formFlex{
     display: flex;
   }
-
+  
   .formFlex .control{
     margin-right:1rem;
   }
@@ -41,6 +41,11 @@
     padding: 0.25rem;
   }
 
+  .control input:disabled , .control select:disabled{
+    background-color: rgb(216, 213, 213);
+    color:black;
+  }
+  
   
   .actions {
     margin-top: 1.5rem;

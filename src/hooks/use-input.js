@@ -1,6 +1,6 @@
 import { useState } from "react";
-const useInput = (validateValue) => {
-  const [enteredValue, setEnteredValue] = useState("");
+const useInput = (validateValue,initialValue="") => {
+  const [enteredValue, setEnteredValue] = useState(initialValue);
   const [IsTouched, setIsTouched] = useState(false);
 
   const isInvalid = validateValue(enteredValue) && IsTouched;

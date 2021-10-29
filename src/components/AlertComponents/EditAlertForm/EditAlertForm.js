@@ -1,17 +1,16 @@
-import React from "react";
-import { useState, useContext } from "react";
-import classes from "./AlertForm.module.css";
+import React ,{useContext}from "react";
+import classes from "./EditAlertForm.module.css";
 import useInput from "../../../hooks/use-input";
 import AuthContext from "../../../store/auth-context";
 
-export default function AlertForm(props) {
-  const [isSchedule, setSchedule] = useState("SCHEDULE");
+export default function EditAlertForm({ alert, onCancel, onSave }) {
+  const isSchedule = alert.type.toLowerCase() === "schedule" ? true : false;
   const authCtx = useContext(AuthContext);
-  const devices = authCtx.userDevices;
   const currentUser= authCtx.currentUser;
   console.log(currentUser);
+
   const IsEmpty = (value) => {
-    return value.trim() === "";
+    return false;
   };
 
   const isStartRange = (start, end) => {
@@ -26,33 +25,33 @@ export default function AlertForm(props) {
     return value < 0;
   };
 
-  const nameHook = useInput(IsEmpty);
-  const limitHook = useInput(biggerThanZero);
-  const contactChannelHook = useInput(IsEmpty,"EMAIL");
-  const periodQuantityHook = useInput(biggerThanZero);
+  let startString = "";
+  let endString = "";
+  if (alert.type.toLowerCase() === "schedule") {
+    startString = `${alert.range.start.hour}:${alert.range.start.minute}`;
+    endString = `${alert.range.end.hour}:${alert.range.end.minute}`;
+  }
+
+  // const nameHook = useInput(IsEmpty);
+  const limitHook = useInput(biggerThanZero, alert.limit);
+  const contactChannelHook = useInput(IsEmpty, alert.contactChannel.type);
+  const periodQuantityHook = useInput(biggerThanZero, alert.periodQuantity);
   const periodTypeHook = useInput(IsEmpty, "DAY");
-  const startHook = useInput(isStartRange);
-  const endHook = useInput(isEndRange);
-  const deviceHook = useInput(IsEmpty, "41333");
-
-  const selectChangeHandler = (event) => {
-    setSchedule((prevState) => !prevState);
-  };
-
+  const startHook = useInput(isStartRange, startString);
+  const endHook = useInput(isEndRange, endString);
   let userContact= contactChannelHook.value === 'EMAIL' ? currentUser.email:contactChannelHook.value === 'TELEPHONE' ? currentUser.telephone: currentUser.discord ;
+ 
   let VolumeAlert = {
-    idBoard: deviceHook.value,
-    name: nameHook.value,
     type: "VOLUME",
+    idAlert: alert._id,
     limit: limitHook.value,
     periodQuantity: periodQuantityHook.value,
     periodType: periodTypeHook.value,
-    contactChannel: { type: contactChannelHook.value, contact: userContact },
+    contactChannel: { type: "TELEPHONE", contact: "1234567890" },
   };
   let ScheduleAlert = {
-    idBoard: deviceHook.value,
-    name: nameHook.value,
     type: "SCHEDULE",
+    idAlert: alert._id,
     limit: limitHook.value,
     range: {
       start: {
@@ -64,18 +63,18 @@ export default function AlertForm(props) {
         minute: endHook.value.split(":")[1],
       },
     },
-    contactChannel: { type: contactChannelHook.value, contact: userContact },
+    contactChannel: { type: "TELEPHONE", contact: "1234567890" },
   };
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onSave(isSchedule ? ScheduleAlert : VolumeAlert);
+    onSave(isSchedule ? ScheduleAlert : VolumeAlert);
   };
   return (
     <div>
       <form onSubmit={submitHandler}>
         <div className={classes.control}>
           <label htmlFor="cars">Alert Type:</label>
-          <select onChange={selectChangeHandler} name="cars">
+          <select disabled value={alert.type.toUpperCase()} name="cars">
             <option value="SCHEDULE">Schedule</option>
             <option value="VOLUME">Volume</option>
           </select>
@@ -83,29 +82,15 @@ export default function AlertForm(props) {
         <div className={classes.formFlex}>
           <div className={classes.control}>
             <label htmlFor="name">Alert Name</label>
-            <input
-              value={nameHook.value}
-              onChange={nameHook.ChangeHandler}
-              onBlur={nameHook.BlurHandler}
-              type="text"
-              required
-            />
+            <input value={alert.name} disabled />
           </div>
           <div className={classes.control}>
             <label htmlFor="name">Device</label>
-            <select
-              value={deviceHook.value}
-              onChange={deviceHook.ChangeHandler}
-              onBlur={deviceHook.BlurHandler}
-              type="text"
-              required
-            >
-              {devices &&
-                devices.map((device) => (
-                  <option key={device.idBoard}value={device.idBoard}>
-                    {device.name ? device.name : "Device"}
-                  </option>
-                ))}
+            <select disabled>
+              <option  value="41333">
+                Principal
+              </option>
+              <option value="41335">Secundario</option>
             </select>
           </div>
         </div>
@@ -130,7 +115,9 @@ export default function AlertForm(props) {
                 type="text"
                 required
               >
-                <option value="DAY">Day</option>
+                <option value="DAY">
+                  Day
+                </option>
                 <option value="WEEK">Week</option>
                 <option value="MONTH">Month</option>
               </select>
@@ -196,7 +183,7 @@ export default function AlertForm(props) {
         </div>
         <div className={classes.actions}>
           <div className={classes.formFlex}>
-            <button className={classes.control} onClick={props.onCancel}>
+            <button className={classes.control} onClick={onCancel}>
               Cancel
             </button>
             <button className={classes.control}>Save</button>

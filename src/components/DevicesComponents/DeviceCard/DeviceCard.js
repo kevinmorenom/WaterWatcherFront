@@ -1,30 +1,36 @@
-import React from 'react';
+import React from "react";
 import classes from "./DeviceCard.module.css";
-import {FaEdit} from "react-icons/fa";
 
-export default function DeviceCard() {
-    const img_url =
-   "https://clipartpngfree.com/save/animals/black_clock_bits_icon_rim.png";
-    return (
-        <div className={classes.card_wrap}>
+export default function DeviceCard({device}) {
+  
+  const img_url =
+    "https://cdn.iconscout.com/icon/free/png-256/water-drop-84-729052.png";
+  return (
+    <div className={classes.card_wrap}>
       <div className={classes.card}>
         <div className={classes.card_up}>
-          <div className={classes.card_mainData}>
-            <div className={classes.card_image}>
-              <img src={img_url}></img>
-            </div>
-            <div className={classes.card_title}>
-              <p id={classes.name}>{alert.name} </p>
-            </div>
-            <div className={classes.actions}>
-                    <button><FaEdit></FaEdit></button>
-            </div>
-          </div>
+          <img alt={'broken'} src={img_url}></img>
+        </div>
+        <div className={classes.card_down}>
           <div className={classes.card_description}>
-            
+            <div className={classes.card_description_item}>
+              <div className={classes.label}>
+                Id
+              </div>
+              <div>
+                {device.idBoard}
+              </div>
+            </div>
+            <div className={classes.card_description_item}>
+              <div className={classes.label}>
+                Name
+              </div>
+              <div> {device.name ? device.name : 'Aqui va el Nombre'}</div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    )
+  );
 }
+

@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import classes from "./CardContainer.module.css";
-import Empty from "../Empty/Empty";
-import AlertCard from "./../../AlertComponents/AlertCard/AlertCard";
-import NewCard from "../NewCard/NewCard";
-import AlertForm from "../../AlertComponents/AlertForm/AlertForm";
+
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 export default function CardContainer(props) {
