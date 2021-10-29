@@ -5,54 +5,41 @@ const AuthContext = React.createContext({
   isLoggedIn: false,
   login: (token) => {},
   logout: () => {},
-  currentUser: {},
-  userDevices: {},
-  refreshDevices: (devices)=>{}
+  currentUser: {}
 });
 
 export const AuthContextProvider = (props) => {
   const initialToken = localStorage.getItem("token");
   const [token, setToken] = useState(initialToken);
   const userIsLoggedIn = !!token;
-  const [user, setUser] = useState(null);
-  const [devices, setDevices] = useState([]);
+  const user = localStorage.getItem("user");
+  console.log(user);
 
   async function getUser() {
-    const response = await fetch(
-      `https://waterwatcher-back.herokuapp.com/api/users/user`,
-      {
-        method: "GET",
-        headers: {
-          authorization: localStorage.getItem("token"),
-        },
-      }
-    );
+    try {
+      const response = await fetch(
+        `https://waterwatcher-back.herokuapp.com/api/users/user`,
+        {
+          method: "GET",
+          headers: {
+            authorization: localStorage.getItem("token"),
+          },
+        }
+      );
 
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.message || "Could not post device");
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Could not get user");
+      }
+      // setUser(data.user);
+      localStorage.setItem("user", data.user);
+      return data.user;
+    } catch {
+      return null;
     }
-    setUser(data.user);
   }
 
-  async function getUserDevices() {
-    const response = await fetch(
-      `https://waterwatcher-back.herokuapp.com/api/boards`,
-      {
-        method: "GET",
-        headers: {
-          authorization: localStorage.getItem("token"),
-        },
-      }
-    );
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || "Could not get user devices");
-    }
-    setDevices(data.data);
-  }
+  
 
   const loginHandler = (token) => {
     setToken(token);
@@ -60,7 +47,6 @@ export const AuthContextProvider = (props) => {
 
     setTimeout(() => {
       getUser();
-      getUserDevices();
     }, 1000);
   };
 
@@ -69,20 +55,14 @@ export const AuthContextProvider = (props) => {
     localStorage.removeItem("token");
   };
 
-  const refreshDevices =(devices)=>{
-      setDevices(devices);
-      
-  }
+  
 
   const contextValue = {
     token: token,
     isLoggedIn: userIsLoggedIn,
     login: loginHandler,
     logout: logoutHandler,
-    currentUser: user,
-    userDevices:devices,
-    refreshDevices:refreshDevices
-
+    currentUser: user
   };
 
   return (

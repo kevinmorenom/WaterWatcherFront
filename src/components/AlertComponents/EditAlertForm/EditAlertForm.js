@@ -1,12 +1,11 @@
-import React ,{useContext}from "react";
+import React from "react";
 import classes from "./EditAlertForm.module.css";
 import useInput from "../../../hooks/use-input";
-import AuthContext from "../../../store/auth-context";
 
-export default function EditAlertForm({ alert, onCancel, onSave }) {
+export default function EditAlertForm({ alert, onCancel, onSave,user }) {
   const isSchedule = alert.type.toLowerCase() === "schedule" ? true : false;
-  const authCtx = useContext(AuthContext);
-  const currentUser= authCtx.currentUser;
+  
+  const currentUser= user;
   
 
   const IsEmpty = (value) => {

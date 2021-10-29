@@ -1,10 +1,9 @@
-import React, { useEffect, useState, useContext, useCallback } from "react";
+import React, { useEffect, useState} from "react";
 import DeviceForm from "../../components/DevicesComponents/DeviceForm/DeviceForm";
 import CardContainer from "../../components/Utils/CardContainer/CardContainer";
 import DeviceCard from "../../components/DevicesComponents/DeviceCard/DeviceCard";
 import NewCard from "../../components/Utils/NewCard/NewCard";
 import Modal from "../../components/Utils/Modal/Modal";
-import AuthContext from "../../store/auth-context";
 import Error from "../../components/Utils/Error/Error";
 
 export default function Devices() {
@@ -12,8 +11,7 @@ export default function Devices() {
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState(false);
-  const authCtx = useContext(AuthContext);
-  // const devices= authCtx.userDevices;
+
 
   const showModalHandler = () => {
     setShowModal(true);
@@ -72,7 +70,6 @@ export default function Devices() {
       throw new Error(data.message || "Could not get user devices");
     }
     setDevices(data.data);
-    authCtx.refreshDevices(data.data);
     setTimeout(() => {
       setIsLoading(false);
     }, 200);

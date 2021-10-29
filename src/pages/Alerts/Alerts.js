@@ -11,9 +11,14 @@ export default function Alerts() {
   const [showModal, setShowModal] = useState(false);
   const [editAlert, setEditAlert] = useState(null);
   const [error, setError] = useState(false);
+  const [alerts, setAlerts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [devices,setDevices]= useState(null);
+  const [user,setUser]= useState(null);
 
   const showModalHandler = () => {
     setShowModal(true);
+    console.log(user);
   };
 
   const dismissModal = () => {
@@ -28,8 +33,28 @@ export default function Alerts() {
     setEditAlert(null);
   };
 
-  const [alerts, setAlerts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  async function getUser() {
+    try {
+      const response = await fetch(
+        `https://waterwatcher-back.herokuapp.com/api/users/user`,
+        {
+          method: "GET",
+          headers: {
+            authorization: localStorage.getItem("token"),
+          },
+        }
+      );
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Could not get user");
+      }
+      setUser(data.user);
+      return data.user;
+    } catch {
+      return null;
+    }
+  }
 
   async function getUserAlerts() {
     try {
@@ -59,8 +84,30 @@ export default function Alerts() {
     }
   }
 
+  async function getUserDevices() {
+    const response = await fetch(
+      `https://waterwatcher-back.herokuapp.com/api/boards`,
+      {
+        method: "GET",
+        headers: {
+          authorization: localStorage.getItem("token"),
+        },
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Could not get user devices");
+    }
+    localStorage.setItem("devices", data.data);
+    setDevices(data.data);
+  }
+
   useEffect(() => {
     getUserAlerts();
+    getUserDevices();
+    getUser();
   }, []);
 
   async function postAlert(newAlert) {
@@ -154,7 +201,7 @@ export default function Alerts() {
       {error && <Error></Error>}
       {!error && showModal && (
         <Modal title="New Alert" onConfirm={postAlert} onCancel={dismissModal}>
-          <AlertForm onCancel={dismissModal} onSave={postAlert}></AlertForm>
+          <AlertForm  user={user} devices={devices} onCancel={dismissModal} onSave={postAlert}></AlertForm>
         </Modal>
       )}
       {!error && editAlert && (
@@ -164,6 +211,7 @@ export default function Alerts() {
           onCancel={dismissEditModal}
         >
           <EditAlertForm
+            user={user}
             alert={editAlert}
             onCancel={dismissEditModal}
             onSave={putAlert}
@@ -185,7 +233,7 @@ export default function Alerts() {
                 onDelete={deleteAlert}
               ></AlertCard>
             ))}
-          <NewCard Modaltitle="New Alert" onClick={showModalHandler}></NewCard>
+          <NewCard Modaltitle="New Alert"  onClick={showModalHandler}></NewCard>
         </CardContainer>
       )}
     </>
