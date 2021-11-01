@@ -13,8 +13,8 @@ export default function Alerts() {
   const [error, setError] = useState(false);
   const [alerts, setAlerts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [devices,setDevices]= useState(null);
-  const [user,setUser]= useState(null);
+  const [devices, setDevices] = useState(null);
+  const [user, setUser] = useState(null);
 
   const showModalHandler = () => {
     setShowModal(true);
@@ -52,7 +52,9 @@ export default function Alerts() {
       setUser(data.user);
       return data.user;
     } catch {
-      return null;
+      alert("Something went wrong while getting user Data");
+      setError(true);
+      setIsLoading(false);
     }
   }
 
@@ -77,31 +79,37 @@ export default function Alerts() {
       setTimeout(() => {
         setIsLoading(false);
       }, 200);
+      console.log(data.alerts);
     } catch {
-      alert("Something went wrong");
+      alert("Something went wrong while getting alerts");
       setError(true);
       setIsLoading(false);
     }
   }
 
   async function getUserDevices() {
-    const response = await fetch(
-      `https://waterwatcher-back.herokuapp.com/api/boards`,
-      {
-        method: "GET",
-        headers: {
-          authorization: localStorage.getItem("token"),
-        },
+    try {
+      const response = await fetch(
+        `https://waterwatcher-back.herokuapp.com/api/boards`,
+        {
+          method: "GET",
+          headers: {
+            authorization: localStorage.getItem("token"),
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Could not get user devices");
       }
-    );
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || "Could not get user devices");
+      localStorage.setItem("devices", data.data);
+      setDevices(data.data);
+    } catch {
+      setError(true);
+      alert("Could not get user devices");
     }
-    localStorage.setItem("devices", data.data);
-    setDevices(data.data);
   }
 
   useEffect(() => {
@@ -141,17 +149,19 @@ export default function Alerts() {
     "https://waterwatcher-back.herokuapp.com/api/alerts/updateVolume";
   const updateScheduleURL =
     "https://waterwatcher-back.herokuapp.com/api/alerts/updateSchedule";
+  const updateTimeURL =
+    "https://waterwatcher-back.herokuapp.com/api/alerts/updateTime";
 
   async function putAlert(editedAlert) {
-
     let updateURL =
-      editedAlert.type === "VOLUME" ? updateVolumeURL : updateScheduleURL;
+      editedAlert.type === "VOLUME"
+        ? updateVolumeURL
+        : editedAlert.type === "SCHEDULE"
+        ? updateScheduleURL
+        : updateTimeURL;
 
-      try{
-
-      } catch{
-
-      }
+    try {
+    } catch {}
     const response = await fetch(updateURL, {
       method: "PUT",
       body: JSON.stringify(editedAlert),
@@ -201,7 +211,12 @@ export default function Alerts() {
       {error && <Error></Error>}
       {!error && showModal && (
         <Modal title="New Alert" onConfirm={postAlert} onCancel={dismissModal}>
-          <AlertForm  user={user} devices={devices} onCancel={dismissModal} onSave={postAlert}></AlertForm>
+          <AlertForm
+            user={user}
+            devices={devices}
+            onCancel={dismissModal}
+            onSave={postAlert}
+          ></AlertForm>
         </Modal>
       )}
       {!error && editAlert && (
@@ -233,7 +248,7 @@ export default function Alerts() {
                 onDelete={deleteAlert}
               ></AlertCard>
             ))}
-          <NewCard Modaltitle="New Alert"  onClick={showModalHandler}></NewCard>
+          <NewCard Modaltitle="New Alert" onClick={showModalHandler}></NewCard>
         </CardContainer>
       )}
     </>

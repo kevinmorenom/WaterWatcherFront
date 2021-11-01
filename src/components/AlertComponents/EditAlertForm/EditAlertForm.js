@@ -1,27 +1,27 @@
 import React from "react";
 import classes from "./EditAlertForm.module.css";
 import useInput from "../../../hooks/use-input";
+import useDoubleInput from "../../../hooks/use-input-double";
 
-export default function EditAlertForm({ alert, onCancel, onSave,user }) {
-  const isSchedule = alert.type.toLowerCase() === "schedule" ? true : false;
-  
-  const currentUser= user;
-  
+export default function EditAlertForm({ alert, onCancel, onSave, user }) {
+  const alertType = alert.type.toUpperCase();
+
+  const currentUser = user;
 
   const IsEmpty = (value) => {
-    return false;
+    return value.length <= 0;
   };
 
-  const isStartRange = (start, end) => {
-    return start > end;
+  const inRange999 = (value) => {
+    return value > 999 || value <= 0;
   };
 
-  const isEndRange = (start, end) => {
-    return end < start;
+  let correctRange = (start, end) => {
+    return start === end;
   };
 
   const biggerThanZero = (value) => {
-    return value < 0;
+    return value <= 0;
   };
 
   let startString = "";
@@ -34,12 +34,36 @@ export default function EditAlertForm({ alert, onCancel, onSave,user }) {
   // const nameHook = useInput(IsEmpty);
   const limitHook = useInput(biggerThanZero, alert.limit);
   const contactChannelHook = useInput(IsEmpty, alert.contactChannel.type);
-  const periodQuantityHook = useInput(biggerThanZero, alert.periodQuantity);
-  const periodTypeHook = useInput(IsEmpty, "DAY");
-  const startHook = useInput(isStartRange, startString);
-  const endHook = useInput(isEndRange, endString);
-  let userContact= contactChannelHook.value === 'EMAIL' ? currentUser.email:contactChannelHook.value === 'TELEPHONE' ? currentUser.telephone: currentUser.discord ;
- 
+  const periodQuantityHook = useInput(inRange999, alert.periodQuantity);
+  const periodTypeHook = useInput(IsEmpty, alert.periodType);
+  const scheduleHook = useDoubleInput(correctRange, startString, endString);
+  let userContact =
+    contactChannelHook.value === "EMAIL"
+      ? currentUser.email
+      : contactChannelHook.value === "TELEPHONE"
+      ? currentUser.telephone
+      : currentUser.discord;
+
+  let formIsInvalid = false;
+
+  if (alertType === "SCHEDULE") {
+    formIsInvalid =
+      limitHook.isInvalid ||
+      contactChannelHook.isInvalid ||
+      scheduleHook.isInvalid;
+  } else if (alertType === "VOLUME") {
+    formIsInvalid =
+      limitHook.isInvalid ||
+      contactChannelHook.isInvalid ||
+      periodQuantityHook.isInvalid ||
+      periodTypeHook.isInvalid;
+  } else {
+    formIsInvalid =
+      contactChannelHook.isInvalid ||
+      periodTypeHook.isInvalid ||
+      periodQuantityHook.isInvalid;
+  }
+
   let VolumeAlert = {
     type: "VOLUME",
     idAlert: alert._id,
@@ -54,19 +78,34 @@ export default function EditAlertForm({ alert, onCancel, onSave,user }) {
     limit: limitHook.value,
     range: {
       start: {
-        hour: startHook.value.split(":")[0],
-        minute: startHook.value.split(":")[1],
+        hour: scheduleHook.firstValue.split(":")[0],
+        minute: scheduleHook.firstValue.split(":")[1],
       },
       end: {
-        hour: endHook.value.split(":")[0],
-        minute: endHook.value.split(":")[1],
+        hour: scheduleHook.secondValue.split(":")[0],
+        minute: scheduleHook.secondValue.split(":")[1],
       },
     },
     contactChannel: { type: "TELEPHONE", contact: "1234567890" },
   };
+
+  let TimeAlert = {
+    idAlert: alert._id,
+    periodQuantity: periodQuantityHook.value,
+    periodType: periodTypeHook.value,
+    contactChannel: { type: contactChannelHook.value, contact: userContact },
+  };
   const submitHandler = (event) => {
     event.preventDefault();
-    onSave(isSchedule ? ScheduleAlert : VolumeAlert);
+    if (!formIsInvalid) {
+      onSave(
+        alertType === "SCHEDULE"
+          ? ScheduleAlert
+          : alertType === "VOLUME"
+          ? VolumeAlert
+          : TimeAlert
+      );
+    }
   };
   return (
     <div>
@@ -76,6 +115,7 @@ export default function EditAlertForm({ alert, onCancel, onSave,user }) {
           <select disabled value={alert.type.toUpperCase()} name="cars">
             <option value="SCHEDULE">Schedule</option>
             <option value="VOLUME">Volume</option>
+            <option value="TIME">Continuous flow</option>
           </select>
         </div>
         <div className={classes.formFlex}>
@@ -86,17 +126,15 @@ export default function EditAlertForm({ alert, onCancel, onSave,user }) {
           <div className={classes.control}>
             <label htmlFor="name">Device</label>
             <select disabled>
-              <option  value="41333">
-                Principal
-              </option>
+              <option value="41333">Principal</option>
               <option value="41335">Secundario</option>
             </select>
           </div>
         </div>
-        {!isSchedule && (
+        {alertType !== "SCHEDULE" && (
           <div className={classes.formFlex}>
             <div className={classes.control}>
-              <label htmlFor="name">Period</label>
+              <label htmlFor="name">Period Quantity</label>
               <input
                 value={periodQuantityHook.value}
                 onChange={periodQuantityHook.ChangeHandler}
@@ -104,9 +142,12 @@ export default function EditAlertForm({ alert, onCancel, onSave,user }) {
                 type="number"
                 required
               />
+              {periodQuantityHook.isInvalid && (
+                <p className={classes.errorText}>Invalid Period Qty***</p>
+              )}
             </div>
             <div className={classes.control}>
-              <label htmlFor="name">Your Name</label>
+              <label htmlFor="name">Period Type</label>
               <select
                 value={periodTypeHook.value}
                 onChange={periodTypeHook.ChangeHandler}
@@ -114,70 +155,86 @@ export default function EditAlertForm({ alert, onCancel, onSave,user }) {
                 type="text"
                 required
               >
-                <option value="DAY">
-                  Day
-                </option>
-                <option value="WEEK">Week</option>
-                <option value="MONTH">Month</option>
+                {alertType === "VOLUME" && (
+                  <>
+                    <option value="DAY">Day</option>
+                    <option value="WEEK">Week</option>
+                    <option value="MONTH">Month</option>
+                  </>
+                )}
+                {alertType === "TIME" && (
+                  <>
+                    <option value="MINUTES">Minutes</option>
+                    <option value="HOUR">Hours</option>
+                  </>
+                )}
               </select>
             </div>
           </div>
         )}
-        {isSchedule && (
+        {alertType === "SCHEDULE" && (
           <div className={classes.formFlex}>
             <div className={classes.control}>
               <label htmlFor="name">From</label>
               <input
-                value={startHook.value}
-                onChange={startHook.ChangeHandler}
-                onBlur={startHook.BlurHandler}
+                value={scheduleHook.firstValue}
+                onChange={scheduleHook.FirstChangeHandler}
+                onBlur={scheduleHook.FirstBlurHandler}
                 type="time"
                 required
               />
+              {scheduleHook.isInvalid && (
+                <p className={classes.errorText}>Invalid Range</p>
+              )}
             </div>
             <div className={classes.control}>
               <label htmlFor="name">To</label>
               <input
-                value={endHook.value}
-                onChange={endHook.ChangeHandler}
-                onBlur={endHook.BlurHandler}
+                value={scheduleHook.secondValue}
+                onChange={scheduleHook.SecondChangeHandler}
+                onBlur={scheduleHook.SecondBlurHandler}
                 type="time"
                 required
               />
             </div>
           </div>
         )}
-        <div className={classes.control}>
-          <label htmlFor="name">Limit</label>
-          <input
-            value={limitHook.value}
-            onChange={limitHook.ChangeHandler}
-            onBlur={limitHook.BlurHandler}
-            type="number"
-            id="number"
-            required
-          />
-        </div>
+        {alertType !== "TIME" && (
+          <div className={classes.control}>
+            <label htmlFor="name">Limit</label>
+            <input
+              value={limitHook.value}
+              onChange={limitHook.ChangeHandler}
+              onBlur={limitHook.BlurHandler}
+              type="number"
+              id="number"
+              required
+            />
+            {limitHook.isInvalid && (
+              <p className={classes.errorText}>Invalid limit**</p>
+            )}
+          </div>
+        )}
         <div className={classes.formFlex}>
           <div className={classes.control}>
             <label htmlFor="name">Contact Channel</label>
             <select
-                  value={contactChannelHook.value}
-                  onChange={contactChannelHook.ChangeHandler}
-                  onBlur={contactChannelHook.BlurHandler}
-                  type="text"
-                  required
-                >
-                {currentUser.email && <option value="EMAIL">Email</option>}
-                 { currentUser.telephone && <option value="TELEPHONE">Telephone</option>}
-                 { currentUser.discord && <option value="DISCORD">Discord</option>}
-                </select>
+              value={contactChannelHook.value}
+              onChange={contactChannelHook.ChangeHandler}
+              onBlur={contactChannelHook.BlurHandler}
+              type="text"
+              required
+            >
+              {currentUser.email && <option value="EMAIL">Email</option>}
+              {currentUser.telephone && (
+                <option value="TELEPHONE">Telephone</option>
+              )}
+              {currentUser.discord && <option value="DISCORD">Discord</option>}
+            </select>
           </div>
           <div className={classes.control}>
             <label htmlFor="name">.</label>
-            <input disabled value={userContact}>
-               
-                </input>
+            <input disabled value={userContact}></input>
           </div>
         </div>
         <div className={classes.actions}>
@@ -185,7 +242,9 @@ export default function EditAlertForm({ alert, onCancel, onSave,user }) {
             <button className={classes.control} onClick={onCancel}>
               Cancel
             </button>
-            <button className={classes.control}>Save</button>
+            <button disabled={formIsInvalid} className={classes.control}>
+              Save
+            </button>
           </div>
         </div>
       </form>

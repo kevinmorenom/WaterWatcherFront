@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import DeviceForm from "../../components/DevicesComponents/DeviceForm/DeviceForm";
 import CardContainer from "../../components/Utils/CardContainer/CardContainer";
 import DeviceCard from "../../components/DevicesComponents/DeviceCard/DeviceCard";
@@ -12,7 +12,6 @@ export default function Devices() {
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState(false);
 
-
   const showModalHandler = () => {
     setShowModal(true);
   };
@@ -21,88 +20,66 @@ export default function Devices() {
     setShowModal(false);
   };
 
-  // const getUserDevices = useCallback(
-  //   async function () {
-  //     try {
-  //       const response = await fetch(
-  //         `https://waterwatcher-back.herokuapp.com/api/boards`,
-  //         {
-  //           method: "GET",
-  //           headers: {
-  //             authorization: localStorage.getItem("token"),
-  //             'Access-Control-Allow-Origin': '*'
-  //           },
-  //         }
-  //       );
-
-  //       const data = await response.json();
-
-  //       if (!response.ok) {
-  //         throw new Error(data.message || "Could not get user devices");
-  //       }
-  //       setDevices(data.data);
-  //       authCtx.refreshDevices(data.data);
-  //       setTimeout(() => {
-  //         setIsLoading(false);
-  //       }, 200);
-  //     } catch {
-  //       setError(true);
-  //       setIsLoading(false);
-  //     }
-  //   },
-  //   [authCtx]
-  // );
-
   async function getUserDevices() {
-    const response = await fetch(
-      `https://waterwatcher-back.herokuapp.com/api/boards`,
-      {
-        method: "GET",
-        headers: {
-          authorization: localStorage.getItem("token"),
-        },
+    try {
+      const response = await fetch(
+        `https://waterwatcher-back.herokuapp.com/api/boards`,
+        {
+          method: "GET",
+          headers: {
+            authorization: localStorage.getItem("token"),
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Could not get user devices");
       }
-    );
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || "Could not get user devices");
+      setDevices(data.data);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 200);
+    } catch {
+      alert("Something went wrong while getting user Devices");
+      setError(true);
     }
-    setDevices(data.data);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 200);
   }
 
   useEffect(() => {
-    async function fetchDevices(){
-      const users=  await getUserDevices();
+    async function fetchDevices() {
+      const users = await getUserDevices();
     }
     fetchDevices();
   }, []);
 
   async function postUserDevice(newDevice) {
-    const response = await fetch(
-      `https://waterwatcher-back.herokuapp.com/api/boards`,
-      {
-        method: "POST",
-        body: JSON.stringify(newDevice),
-        headers: {
-          authorization: localStorage.getItem("token"),
-          "Content-Type": "application/json",
-        },
+    try {
+      const response = await fetch(
+        `https://waterwatcher-back.herokuapp.com/api/boards`,
+        {
+          method: "POST",
+          body: JSON.stringify(newDevice),
+          headers: {
+            authorization: localStorage.getItem("token"),
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Could not post device");
       }
-    );
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || "Could not post device");
+      getUserDevices();
+      dismissModal();
+    } catch {
+      alert("Something went wrong while posting new Device");
+      setError(true);
     }
-
-    getUserDevices();
-    dismissModal();
   }
 
   return (

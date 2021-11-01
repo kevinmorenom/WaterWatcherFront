@@ -13,6 +13,10 @@ const useInput = (validateValue,initialValue="") => {
     setIsTouched(true);
   };
 
+  const setTouched=(boolean)=>{
+    setIsTouched(boolean);
+  }
+
   const reset= ()=>{
       setEnteredValue('');
       setIsTouched(false);
@@ -23,6 +27,7 @@ const useInput = (validateValue,initialValue="") => {
     isInvalid: isInvalid,
     ChangeHandler,
     BlurHandler,
+    setTouched,
     reset,
   };
 };

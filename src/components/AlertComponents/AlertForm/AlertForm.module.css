@@ -9,29 +9,30 @@
   text-align: start;
 }
 
+.hiddenOption {
+  display: none;
+}
 
-
-.formFlex{
+.formFlex {
   display: flex;
 }
 
-.formFlex .control{
-  margin-right:1rem;
+.formFlex .control {
+  margin-right: 1rem;
 }
-  
+
 .control {
   margin-bottom: 1rem;
-  
 }
 
 .control label {
   color: black;
   font-weight: bold;
   margin-bottom: 0.5rem;
-  
 }
 
-.control input, .control select {
+.control input,
+.control select {
   font: inherit;
   background-color: rgb(255, 255, 255);
   border-radius: 4px;
@@ -40,7 +41,6 @@
   /* text-align: start; */
   padding: 0.25rem;
 }
-
 
 .actions {
   margin-top: 1.5rem;

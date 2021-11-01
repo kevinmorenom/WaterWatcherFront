@@ -1,37 +1,40 @@
 import React from "react";
 import classes from "./AlertCard.module.css";
-import {FaEdit} from "react-icons/fa";
-import {FaRegTrashAlt} from "react-icons/fa";
+import { FaEdit } from "react-icons/fa";
+import { FaRegTrashAlt } from "react-icons/fa";
 
-export default function AlertCard({ alert,onEdit,onDelete}) {
-  
-
-  const editHandler=()=>{
+export default function AlertCard({ alert, onEdit, onDelete }) {
+  const editHandler = () => {
     onEdit(alert);
-  }
-  const deleteHandler=()=>{
+  };
+  const deleteHandler = () => {
     onDelete(alert._id);
-  }
-  
+  };
+
   const img_url =
     alert.type.toLowerCase() === "schedule"
       ? "https://clipartpngfree.com/save/animals/black_clock_bits_icon_rim.png"
-      : "https://pixsector.com/cache/9e5b1f54/av206d445c95daddcc4ad.png";
+      : alert.type.toLowerCase() === "volume"
+      ? "https://pixsector.com/cache/9e5b1f54/av206d445c95daddcc4ad.png"
+      : "https://static.thenounproject.com/png/80254-200.png";
   return (
     <div className={classes.card_wrap}>
       <div className={classes.card}>
         <div className={classes.card_up}>
           <div className={classes.card_mainData}>
             <div className={classes.card_image}>
-              <img alt='broken' src={img_url}></img>
+              <img alt="broken" src={img_url}></img>
             </div>
             <div className={classes.card_title}>
               <p id={classes.name}>{alert.name} </p>
             </div>
             <div className={classes.actions}>
-                    <button className={classes.edit} onClick={editHandler}><FaEdit></FaEdit></button>
-                    <button className={classes.delete} onClick={deleteHandler}><FaRegTrashAlt></FaRegTrashAlt></button>
-
+              <button className={classes.edit} onClick={editHandler}>
+                <FaEdit></FaEdit>
+              </button>
+              <button className={classes.delete} onClick={deleteHandler}>
+                <FaRegTrashAlt></FaRegTrashAlt>
+              </button>
             </div>
           </div>
           <div className={classes.card_description}>
@@ -39,10 +42,10 @@ export default function AlertCard({ alert,onEdit,onDelete}) {
               <div>
                 {" "}
                 <p className={classes.label}>Type:</p>{" "}
-                {alert.type.toLowerCase()}
+                {alert.type.toLowerCase()==='time'? 'continuous flow':alert.type.toLowerCase()}
               </div>
 
-              {alert.type.toLowerCase() === "volume" ? (
+              {alert.type.toLowerCase() !== "schedule" ? (
                 <div>
                   <p className={classes.label}>Period: </p>
                   {alert.periodQuantity} {alert.periodType.toLowerCase()}
@@ -67,10 +70,10 @@ export default function AlertCard({ alert,onEdit,onDelete}) {
                   </div>
                 </div>
               )}
-              <li>
+              {alert.type.toLowerCase() !== "time" &&<li>
                 <p className={classes.label}>Limit: </p>
                 {alert.limit}
-              </li>
+              </li>}
             </ul>
           </div>
         </div>
