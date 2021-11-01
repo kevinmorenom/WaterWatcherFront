@@ -9,6 +9,15 @@
   text-align: center;
 }
 
+.invalidCredentials{
+  background-color: red;
+  color: white;
+  font-weight: bold;
+  border-radius:40px;
+  padding:10px;
+  margin-bottom:20px;
+}
+
 .main {
   display: flex;
   flex-direction: column;

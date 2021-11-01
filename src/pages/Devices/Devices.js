@@ -49,7 +49,7 @@ export default function Devices() {
 
   useEffect(() => {
     async function fetchDevices() {
-      const users = await getUserDevices();
+      await getUserDevices();
     }
     fetchDevices();
   }, []);

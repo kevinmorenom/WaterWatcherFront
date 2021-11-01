@@ -5,7 +5,6 @@ import AuthContext from "./store/auth-context";
 import Layout from "./components/Layout/Layout";
 import Devices from "./pages/Devices/Devices";
 import Alerts from "./pages/Alerts/Alerts";
-import MainPage from "./pages/MainPage/MainPage";
 import Auth from "./components/Auth/Auth";
 
 function App() {
@@ -15,14 +14,14 @@ function App() {
     <Layout>
       <Switch>
         <Route path="/" exact>
-          {!isLoggedIn ? <Auth></Auth> : <Redirect to="/home" />}
+          {!isLoggedIn ? <Auth></Auth> : <Redirect to="/alerts" />}
         </Route>
         {isLoggedIn && (
           <>
             {" "}
-            <Route path="/home" exact>
+            {/* <Route path="/home" exact>
               <MainPage></MainPage>
-            </Route>
+            </Route> */}
             <Route path="/devices">
               <Devices></Devices>
             </Route>
@@ -31,7 +30,6 @@ function App() {
             </Route>
           </>
         )}
-
         <Route>{!isLoggedIn && <Redirect to="/" />}</Route>
       </Switch>
     </Layout>

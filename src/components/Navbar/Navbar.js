@@ -15,12 +15,12 @@ export default function Navbar() {
       <nav>
         <ul>
           <li>
-            <Link to="/home">
+            {/* <Link to="/"> */}
               <img
                 src="http://www.crazyleafdesign.com/blog/wp-content/uploads/2016/10/eyecon_1x.png"
                 alt="Paris"
               />
-            </Link>
+            {/* </Link> */}
           </li>
           {isLoggedIn && (
             <>

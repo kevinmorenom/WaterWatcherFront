@@ -6,6 +6,7 @@ import useInput from "../../hooks/use-input";
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
+  const [authError, setAuthError] = useState(false);
   const nameHook = useInput((value) => value.trim() === "");
   const emailHook = useInput((value) => !value.includes("@"));
   const passwordHook = useInput((value) => value.trim().length === 0);
@@ -52,23 +53,54 @@ export default function Auth() {
     ? true
     : false;
 
-  const LoginHandler = () => {
+  async function LoginHandler(){
     let credentials = {
       password: passwordHook.value,
       email: emailHook.value,
     };
-    fetch("https://waterwatcher-back.herokuapp.com/api/users/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(credentials),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        authCtx.login(data.token);
-        history.replace("/home");
+
+    try {
+      const response = await fetch("https://waterwatcher-back.herokuapp.com/api/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(credentials),
       });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Could not get user");
+      }
+      authCtx.login(data.token);
+      history.replace("/alerts");
+     
+    } catch {
+      setAuthError(true);
+      
+    }
+
+    // // try {
+    //   fetch("https://waterwatcher-back.herokuapp.com/api/users/login", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(credentials),
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     authCtx.login(data.token);
+    //     history.replace("/alerts");
+    //   }).catch(function(error){
+    //     console.log(error);
+    //   });
+
+    // }
+    // catch (e){
+    //   console.log(e);
+    // }
+    
   };
 
   const RegisterHandler = () => {
@@ -100,6 +132,7 @@ export default function Auth() {
       />
       <section className={classes.auth}>
         <h1>{isLogin ? "Login" : "Sign Up"}</h1>
+        {authError && <div className={classes.invalidCredentials}>Invalid Credentials</div>}
         <form onSubmit={submitHandler}>
           {!isLogin && (
             <div className={classes.control}>
