@@ -18,7 +18,6 @@ export default function Alerts() {
 
   const showModalHandler = () => {
     setShowModal(true);
-    console.log(user);
   };
 
   const dismissModal = () => {
@@ -79,7 +78,6 @@ export default function Alerts() {
       setTimeout(() => {
         setIsLoading(false);
       }, 200);
-      console.log(data.alerts);
     } catch {
       alert("Something went wrong while getting alerts");
       setError(true);

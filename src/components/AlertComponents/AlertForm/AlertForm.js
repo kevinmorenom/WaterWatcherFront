@@ -62,12 +62,6 @@ export default function AlertForm(props) {
       periodQuantityHook.isInvalid;
   }
 
-  console.log(typeHook.value);
-  console.log(typeHook.isInvalid);
-
-  // const selectChangeHandler = (event) => {
-  //   setAlertType(event.target.value);
-  // };
 
   let userContact =
     contactChannelHook.value === "EMAIL"
