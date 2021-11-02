@@ -80,26 +80,6 @@ export default function Auth() {
       
     }
 
-    // // try {
-    //   fetch("https://waterwatcher-back.herokuapp.com/api/users/login", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(credentials),
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     authCtx.login(data.token);
-    //     history.replace("/alerts");
-    //   }).catch(function(error){
-    //     console.log(error);
-    //   });
-
-    // }
-    // catch (e){
-    //   console.log(e);
-    // }
     
   };
 

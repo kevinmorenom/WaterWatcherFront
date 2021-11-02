@@ -6,6 +6,7 @@ import Layout from "./components/Layout/Layout";
 import Devices from "./pages/Devices/Devices";
 import Alerts from "./pages/Alerts/Alerts";
 import Auth from "./components/Auth/Auth";
+import Profile from "./pages/Profile/Profile";
 
 function App() {
   const authCtx = useContext(AuthContext);
@@ -27,6 +28,9 @@ function App() {
             </Route>
             <Route path="/alerts">
               <Alerts></Alerts>
+            </Route>
+            <Route path="/profile">
+              <Profile></Profile>
             </Route>
           </>
         )}
