@@ -32,8 +32,6 @@ export default function Alerts() {
     setEditAlert(null);
   };
 
-  console.log(process.env);
-
   async function getUser() {
     try {
       const response = await fetch(
