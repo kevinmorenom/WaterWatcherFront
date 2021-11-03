@@ -23,7 +23,7 @@ export default function Devices() {
   async function getUserDevices() {
     try {
       const response = await fetch(
-        `https://waterwatcher-back.herokuapp.com/api/boards`,
+        `${process.env.REACT_APP_BACKEND_URL}/boards`,
         {
           method: "GET",
           headers: {
@@ -57,7 +57,7 @@ export default function Devices() {
   async function postUserDevice(newDevice) {
     try {
       const response = await fetch(
-        `https://waterwatcher-back.herokuapp.com/api/boards`,
+        `${process.env.REACT_APP_BACKEND_URL}/boards`,
         {
           method: "POST",
           body: JSON.stringify(newDevice),

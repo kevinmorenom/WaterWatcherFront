@@ -60,7 +60,7 @@ export default function Auth() {
     };
 
     try {
-      const response = await fetch("https://waterwatcher-back.herokuapp.com/api/users/login", {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/users/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -90,7 +90,7 @@ export default function Auth() {
       email: emailHook.value,
       telephone: telephoneHook.value,
     };
-    fetch("https://waterwatcher-back.herokuapp.com/api/users/signup", {
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/users/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -32,10 +32,12 @@ export default function Alerts() {
     setEditAlert(null);
   };
 
+  console.log(process.env);
+
   async function getUser() {
     try {
       const response = await fetch(
-        `https://waterwatcher-back.herokuapp.com/api/users/user`,
+        `${process.env.REACT_APP_BACKEND_URL}/users/user`,
         {
           method: "GET",
           headers: {
@@ -60,7 +62,7 @@ export default function Alerts() {
   async function getUserAlerts() {
     try {
       const response = await fetch(
-        `https://waterwatcher-back.herokuapp.com/api/alerts`,
+        `${process.env.REACT_APP_BACKEND_URL}/alerts`,
         {
           method: "GET",
           headers: {
@@ -88,7 +90,7 @@ export default function Alerts() {
   async function getUserDevices() {
     try {
       const response = await fetch(
-        `https://waterwatcher-back.herokuapp.com/api/boards`,
+        `${process.env.REACT_APP_BACKEND_URL}/boards`,
         {
           method: "GET",
           headers: {
@@ -119,7 +121,7 @@ export default function Alerts() {
   async function postAlert(newAlert) {
     try {
       const response = await fetch(
-        `https://waterwatcher-back.herokuapp.com/api/alerts`,
+        `${process.env.REACT_APP_BACKEND_URL}/alerts`,
         {
           method: "POST",
           body: JSON.stringify(newAlert),
@@ -144,12 +146,14 @@ export default function Alerts() {
   }
 
   const updateVolumeURL =
-    "https://waterwatcher-back.herokuapp.com/api/alerts/updateVolume";
-  const updateScheduleURL =
-    "https://waterwatcher-back.herokuapp.com/api/alerts/updateSchedule";
-  const updateTimeURL =
-    "https://waterwatcher-back.herokuapp.com/api/alerts/updateTime";
 
+    `${process.env.REACT_APP_BACKEND_URL}/alerts/updateVolume`;
+  const updateScheduleURL =
+    `${process.env.REACT_APP_BACKEND_URL}/alerts/updateSchedule`;
+  const updateTimeURL =
+    `${process.env.REACT_APP_BACKEND_URL}/alerts/updateTime`;
+
+    
   async function putAlert(editedAlert) {
     let updateURL =
       editedAlert.type === "VOLUME"
@@ -182,7 +186,7 @@ export default function Alerts() {
   async function deleteAlert(idAlert) {
     try {
       const response = await fetch(
-        `https://waterwatcher-back.herokuapp.com/api/alerts/${idAlert}`,
+        `${process.env.REACT_APP_BACKEND_URL}/alerts/${idAlert}`,
         {
           method: "DELETE",
           headers: {

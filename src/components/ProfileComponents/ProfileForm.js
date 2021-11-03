@@ -1,7 +1,6 @@
 import React from "react";
 import classes from "./ProfileForm.module.css";
 import useInput from "../../hooks/use-input";
-import useDoubleInput from "../../hooks/use-input-double";
 import { FaUserAlt } from "react-icons/fa";
 
 export default function ProfileForm({ user, updateUser }) {
@@ -9,7 +8,6 @@ export default function ProfileForm({ user, updateUser }) {
     return value.length <= 0;
   };
   const nameHook = useInput(IsEmpty, user.name);
-  const passwordHook = useInput(IsEmpty, "");
   const telephoneHook = useInput((value) => {
     return value.trim().length < 10 || value.trim().length > 10;
   }, user.telephone);
@@ -19,13 +17,16 @@ export default function ProfileForm({ user, updateUser }) {
     event.preventDefault();
     let userData = {
       name: nameHook.value.trim(),
-      password:
-        passwordHook.value.length > 0 ? passwordHook.value : user.password,
+      // password:
+      //   passwordHook.value.length > 0 ? passwordHook.value : user.password,
       telephone: telephoneHook.value,
       discordUser: discordHook.value,
     };
     updateUser(userData);
   };
+
+  let formIsInvalid =
+    nameHook.isInvalid || telephoneHook.isInvalid;
 
   const iconStyle = { color: "#262675", fontSize: 90 };
 
@@ -48,8 +49,8 @@ export default function ProfileForm({ user, updateUser }) {
               required
             />
             {nameHook.isInvalid && (
-                <p className={classes.errorText}>Name should not be empty**</p>
-              )}
+              <p className={classes.errorText}>Name should not be empty**</p>
+            )}
           </div>
           <div className={classes.control}>
             <label htmlFor="name">Email</label>
@@ -61,7 +62,7 @@ export default function ProfileForm({ user, updateUser }) {
               value={user.email}
             />
           </div>
-          <div className={classes.control}>
+          {/* <div className={classes.control}>
             <label htmlFor="name">Password</label>
             <input
               value={passwordHook.value}
@@ -71,7 +72,7 @@ export default function ProfileForm({ user, updateUser }) {
               id="password"
               required
             />
-          </div>
+          </div> */}
 
           <div className={classes.control}>
             <label htmlFor="name">Telephone</label>
@@ -84,12 +85,12 @@ export default function ProfileForm({ user, updateUser }) {
               required
             />
             {telephoneHook.isInvalid && (
-                <p className={classes.errorText}>
-                  Telephone should be 10 characters long**
-                </p>
-              )}
+              <p className={classes.errorText}>
+                Telephone should be 10 characters long**
+              </p>
+            )}
           </div>
-          
+
           <div className={classes.control}>
             <label htmlFor="name">Discord</label>
             <input
@@ -98,12 +99,13 @@ export default function ProfileForm({ user, updateUser }) {
               onBlur={discordHook.BlurHandler}
               type="text"
               id="password"
-              
             />
           </div>
           <div className={classes.actions}>
             <div className={classes.formFlex}>
-              <button className={classes.control}>Save</button>
+              <button disabled={formIsInvalid} className={classes.control}>
+                Save
+              </button>
             </div>
           </div>
         </form>
