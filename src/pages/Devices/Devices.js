@@ -88,14 +88,13 @@ export default function Devices() {
       }
 
       getUserDevices();
-      // dismissModal();
+      dismissModal();
     } catch {
       alert("Something went wrong while posting new Device");
       setError(true);
     }
   }
 
-  const yamlHandler = () => {};
 
   return (
     <>

@@ -6,7 +6,6 @@ import { FaClone} from "react-icons/fa";
 
 export default function YamlModal(props) {
   const [copied, setCopied] = useState(false);
-  console.log(props.devices);
   let YAMLdraft = "sensor:";
   const confirmCopyStyle = {
     margin: "1px",

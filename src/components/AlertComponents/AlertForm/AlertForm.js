@@ -118,7 +118,8 @@ export default function AlertForm(props) {
 
   return (
     <div>
-      <form onSubmit={submitHandler}>
+      {props.devices.length===0 && <h2>Please add a device first</h2>}
+      {props.devices.length>0 && <form onSubmit={submitHandler}>
         <div className={classes.control}>
           <label htmlFor="cars">Alert Type:</label>
           <select
@@ -304,7 +305,7 @@ export default function AlertForm(props) {
             </button>
           </div>
         </div>
-      </form>
+      </form>}
     </div>
   );
 }
