@@ -62,7 +62,6 @@ export default function AlertForm(props) {
       periodQuantityHook.isInvalid;
   }
 
-
   let userContact =
     contactChannelHook.value === "EMAIL"
       ? currentUser.email
@@ -118,194 +117,198 @@ export default function AlertForm(props) {
 
   return (
     <div>
-      {props.devices.length===0 && <h2>Please add a device first</h2>}
-      {props.devices.length>0 && <form onSubmit={submitHandler}>
-        <div className={classes.control}>
-          <label htmlFor="cars">Alert Type:</label>
-          <select
-            onChange={typeHook.ChangeHandler}
-            onBlur={typeHook.BlurHandler}
-            name="cars"
-            required
-          >
-            <option value="SCHEDULE">Schedule</option>
-            <option value="VOLUME">Volume</option>
-            <option value="TIME">Continuous Flow</option>
-          </select>
-          {typeHook.isInvalid && (
-            <p className={classes.errorText}>Please select a type</p>
+      {props.devices.length === 0 && <h2>Please add a device first</h2>}
+      {props.devices.length > 0 && (
+        <form onSubmit={submitHandler}>
+          <div className={classes.control}>
+            <label htmlFor="cars">Alert Type:</label>
+            <select
+              onChange={typeHook.ChangeHandler}
+              onBlur={typeHook.BlurHandler}
+              name="cars"
+              required
+            >
+              <option value="SCHEDULE">Schedule</option>
+              <option value="VOLUME">Volume</option>
+              <option value="TIME">Continuous Flow</option>
+            </select>
+            {typeHook.isInvalid && (
+              <p className={classes.errorText}>Please select a type</p>
+            )}
+          </div>
+          <div className={classes.formFlex}>
+            <div className={classes.control}>
+              <label htmlFor="name">Alert Name</label>
+              <input
+                value={nameHook.value}
+                onChange={nameHook.ChangeHandler}
+                onBlur={nameHook.BlurHandler}
+                type="text"
+                required
+              />
+              {nameHook.isInvalid && (
+                <p className={classes.errorText}>Name should not be empty**</p>
+              )}
+            </div>
+            <div className={classes.control}>
+              <label htmlFor="name">Device</label>
+              <select
+                value={deviceHook.value}
+                onChange={deviceHook.ChangeHandler}
+                onBlur={deviceHook.BlurHandler}
+                type="text"
+                required
+              >
+                {props.devices &&
+                  props.devices.map((device) => (
+                    <option key={device.idBoard} value={device.idBoard}>
+                      {device.name ? device.name : "Device"}
+                    </option>
+                  ))}
+              </select>
+              {deviceHook.isInvalid && (
+                <p className={classes.errorText}>Please select a device**</p>
+              )}
+            </div>
+          </div>
+          {alertType !== "SCHEDULE" && (
+            <div className={classes.formFlex}>
+              <div className={classes.control}>
+                <label htmlFor="name">Period Qty</label>
+                <input
+                  value={periodQuantityHook.value}
+                  onChange={periodQuantityHook.ChangeHandler}
+                  onBlur={periodQuantityHook.BlurHandler}
+                  max="999"
+                  type="number"
+                  required
+                />
+                {periodQuantityHook.isInvalid && (
+                  <p className={classes.errorText}>
+                    Value must be between 1 and 999
+                  </p>
+                )}
+              </div>
+              {alertType === "VOLUME" && (
+                <div className={classes.control}>
+                  <label htmlFor="name">Period Type</label>
+                  <select
+                    value={periodTypeHook.value}
+                    onChange={periodTypeHook.ChangeHandler}
+                    onBlur={periodTypeHook.BlurHandler}
+                    type="text"
+                    required
+                  >
+                    <option value="DAY">Day</option>
+                    <option value="WEEK">Week</option>
+                    <option value="MONTH">Month</option>
+                  </select>
+                  {periodTypeHook.isInvalid && (
+                    <p className={classes.errorText}>Please select one type</p>
+                  )}
+                </div>
+              )}
+              {alertType === "TIME" && (
+                <div className={classes.control}>
+                  <label htmlFor="name">Period Type</label>
+                  <select
+                    value={timePeriodTypeHook.value}
+                    onChange={timePeriodTypeHook.ChangeHandler}
+                    onBlur={timePeriodTypeHook.BlurHandler}
+                    type="text"
+                    required
+                  >
+                    <option selected value="MINUTES">
+                      Minutes
+                    </option>
+                    <option value="HOUR">Hours</option>
+                  </select>
+                  {timePeriodTypeHook.isInvalid && (
+                    <p className={classes.errorText}>Please select one type</p>
+                  )}
+                </div>
+              )}
+            </div>
           )}
-        </div>
-        <div className={classes.formFlex}>
-          <div className={classes.control}>
-            <label htmlFor="name">Alert Name</label>
-            <input
-              value={nameHook.value}
-              onChange={nameHook.ChangeHandler}
-              onBlur={nameHook.BlurHandler}
-              type="text"
-              required
-            />
-            {nameHook.isInvalid && (
-              <p className={classes.errorText}>Name should not be empty**</p>
-            )}
-          </div>
-          <div className={classes.control}>
-            <label htmlFor="name">Device</label>
-            <select
-              value={deviceHook.value}
-              onChange={deviceHook.ChangeHandler}
-              onBlur={deviceHook.BlurHandler}
-              type="text"
-              required
-            >
-              {props.devices &&
-                props.devices.map((device) => (
-                  <option key={device.idBoard} value={device.idBoard}>
-                    {device.name ? device.name : "Device"}
-                  </option>
-                ))}
-            </select>
-            {deviceHook.isInvalid && (
-              <p className={classes.errorText}>Please select a device**</p>
-            )}
-          </div>
-        </div>
-        {alertType !== "SCHEDULE" && (
-          <div className={classes.formFlex}>
+          {alertType === "SCHEDULE" && (
+            <div className={classes.formFlex}>
+              <div className={classes.control}>
+                <label htmlFor="name">From</label>
+                <input
+                  value={scheduleHook.firstValue}
+                  onChange={scheduleHook.FirstChangeHandler}
+                  onBlur={scheduleHook.FirstBlurHandler}
+                  type="time"
+                  required
+                />
+                {scheduleHook.isInvalid && (
+                  <p className={classes.errorText}>Invalid Range</p>
+                )}
+              </div>
+              <div className={classes.control}>
+                <label htmlFor="name">To</label>
+                <input
+                  value={scheduleHook.secondValue}
+                  onChange={scheduleHook.SecondChangeHandler}
+                  onBlur={scheduleHook.SecondBlurHandler}
+                  type="time"
+                  required
+                />
+              </div>
+            </div>
+          )}
+          {alertType !== "TIME" && (
             <div className={classes.control}>
-              <label htmlFor="name">Period Qty</label>
+              <label htmlFor="name">Limit</label>
               <input
-                value={periodQuantityHook.value}
-                onChange={periodQuantityHook.ChangeHandler}
-                onBlur={periodQuantityHook.BlurHandler}
-                max="999"
+                value={limitHook.value}
+                onChange={limitHook.ChangeHandler}
+                onBlur={limitHook.BlurHandler}
                 type="number"
+                id="number"
                 required
               />
-              {periodQuantityHook.isInvalid && (
-                <p className={classes.errorText}>
-                  Value must be between 1 and 999
-                </p>
+              {limitHook.isInvalid && (
+                <p className={classes.errorText}>Invalid limit**</p>
               )}
             </div>
-            {alertType === "VOLUME" && (
-              <div className={classes.control}>
-                <label htmlFor="name">Period Type</label>
-                <select
-                  value={periodTypeHook.value}
-                  onChange={periodTypeHook.ChangeHandler}
-                  onBlur={periodTypeHook.BlurHandler}
-                  type="text"
-                  required
-                >
-                  <option value="DAY">Day</option>
-                  <option value="WEEK">Week</option>
-                  <option value="MONTH">Month</option>
-                </select>
-                {periodTypeHook.isInvalid && (
-                  <p className={classes.errorText}>Please select one type</p>
-                )}
-              </div>
-            )}
-            {alertType === "TIME" && (
-              <div className={classes.control}>
-                <label htmlFor="name">Period Type</label>
-                <select
-                  value={timePeriodTypeHook.value}
-                  onChange={timePeriodTypeHook.ChangeHandler}
-                  onBlur={timePeriodTypeHook.BlurHandler}
-                  type="text"
-                  required
-                >
-                  <option selected value="MINUTES">
-                    Minutes
-                  </option>
-                  <option value="HOUR">Hours</option>
-                </select>
-                {timePeriodTypeHook.isInvalid && (
-                  <p className={classes.errorText}>Please select one type</p>
-                )}
-              </div>
-            )}
-          </div>
-        )}
-        {alertType === "SCHEDULE" && (
+          )}
           <div className={classes.formFlex}>
             <div className={classes.control}>
-              <label htmlFor="name">From</label>
-              <input
-                value={scheduleHook.firstValue}
-                onChange={scheduleHook.FirstChangeHandler}
-                onBlur={scheduleHook.FirstBlurHandler}
-                type="time"
+              <label htmlFor="name">Contact Channel</label>
+              <select
+                value={contactChannelHook.value}
+                onChange={contactChannelHook.ChangeHandler}
+                onBlur={contactChannelHook.BlurHandler}
+                type="text"
                 required
-              />
-              {scheduleHook.isInvalid && (
-                <p className={classes.errorText}>Invalid Range</p>
-              )}
+              >
+                {currentUser.email && <option value="EMAIL">Email</option>}
+                {currentUser.telephone && (
+                  <option value="SMS">Telephone</option>
+                )}
+                {currentUser.discord && (
+                  <option value="TELEGRAM">Discord</option>
+                )}
+              </select>
             </div>
             <div className={classes.control}>
-              <label htmlFor="name">To</label>
-              <input
-                value={scheduleHook.secondValue}
-                onChange={scheduleHook.SecondChangeHandler}
-                onBlur={scheduleHook.SecondBlurHandler}
-                type="time"
-                required
-              />
+              <label htmlFor="name">.</label>
+              <input disabled value={userContact}></input>
             </div>
           </div>
-        )}
-        {alertType !== "TIME" && (
-          <div className={classes.control}>
-            <label htmlFor="name">Limit</label>
-            <input
-              value={limitHook.value}
-              onChange={limitHook.ChangeHandler}
-              onBlur={limitHook.BlurHandler}
-              type="number"
-              id="number"
-              required
-            />
-            {limitHook.isInvalid && (
-              <p className={classes.errorText}>Invalid limit**</p>
-            )}
+          <div className={classes.actions}>
+            <div className={classes.formFlex}>
+              <button className={classes.control} onClick={props.onCancel}>
+                Cancel
+              </button>
+              <button disabled={formIsInvalid} className={classes.control}>
+                Save
+              </button>
+            </div>
           </div>
-        )}
-        <div className={classes.formFlex}>
-          <div className={classes.control}>
-            <label htmlFor="name">Contact Channel</label>
-            <select
-              value={contactChannelHook.value}
-              onChange={contactChannelHook.ChangeHandler}
-              onBlur={contactChannelHook.BlurHandler}
-              type="text"
-              required
-            >
-              {currentUser.email && <option value="EMAIL">Email</option>}
-              {currentUser.telephone && (
-                <option value="TELEPHONE">Telephone</option>
-              )}
-              {currentUser.discord && <option value="DISCORD">Discord</option>}
-            </select>
-          </div>
-          <div className={classes.control}>
-            <label htmlFor="name">.</label>
-            <input disabled value={userContact}></input>
-          </div>
-        </div>
-        <div className={classes.actions}>
-          <div className={classes.formFlex}>
-            <button className={classes.control} onClick={props.onCancel}>
-              Cancel
-            </button>
-            <button disabled={formIsInvalid} className={classes.control}>
-              Save
-            </button>
-          </div>
-        </div>
-      </form>}
+        </form>
+      )}
     </div>
   );
 }

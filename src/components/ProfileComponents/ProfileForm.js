@@ -7,11 +7,12 @@ export default function ProfileForm({ user, updateUser }) {
   const IsEmpty = (value) => {
     return value.length <= 0;
   };
+  console.log(user);
   const nameHook = useInput(IsEmpty, user.name);
   const telephoneHook = useInput((value) => {
     return value.trim().length < 10 || value.trim().length > 10;
   }, user.telephone);
-  const discordHook = useInput(IsEmpty, user.discord);
+  const telegramHook = useInput(IsEmpty, user.discordUser);
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -20,7 +21,7 @@ export default function ProfileForm({ user, updateUser }) {
       // password:
       //   passwordHook.value.length > 0 ? passwordHook.value : user.password,
       telephone: telephoneHook.value,
-      discordUser: discordHook.value,
+      discordUser: telegramHook.value,
     };
     updateUser(userData);
   };
@@ -92,11 +93,11 @@ export default function ProfileForm({ user, updateUser }) {
           </div>
 
           <div className={classes.control}>
-            <label htmlFor="name">Discord</label>
+            <label htmlFor="name">Telegram</label>
             <input
-              value={discordHook.value}
-              onChange={discordHook.ChangeHandler}
-              onBlur={discordHook.BlurHandler}
+              value={telegramHook.value}
+              onChange={telegramHook.ChangeHandler}
+              onBlur={telegramHook.BlurHandler}
               type="text"
               id="password"
             />
