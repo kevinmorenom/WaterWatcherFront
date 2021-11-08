@@ -7,7 +7,6 @@ export default function ProfileForm({ user, updateUser }) {
   const IsEmpty = (value) => {
     return value.length <= 0;
   };
-  console.log(user);
   const nameHook = useInput(IsEmpty, user.name);
   const telephoneHook = useInput((value) => {
     return value.trim().length < 10 || value.trim().length > 10;
