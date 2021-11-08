@@ -26,6 +26,7 @@ export default function Alerts() {
 
   const showEditModal = (alertID) => {
     setEditAlert(alertID);
+    console.log(alertID);
   };
 
   const dismissEditModal = () => {
@@ -228,6 +229,7 @@ export default function Alerts() {
           <EditAlertForm
             user={user}
             alert={editAlert}
+            devices={devices}
             onCancel={dismissEditModal}
             onSave={putAlert}
           ></EditAlertForm>

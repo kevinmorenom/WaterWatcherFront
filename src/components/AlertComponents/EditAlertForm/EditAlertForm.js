@@ -3,10 +3,15 @@ import classes from "./EditAlertForm.module.css";
 import useInput from "../../../hooks/use-input";
 import useDoubleInput from "../../../hooks/use-input-double";
 
-export default function EditAlertForm({ alert, onCancel, onSave, user }) {
+export default function EditAlertForm({ alert, onCancel, onSave, user,devices }) {
   const alertType = alert.type.toUpperCase();
-
+  const selectedDevice=devices.find(element=>element.idBoard===alert.idBoard);
+  
   const currentUser = user;
+  console.log(alert.idBoard);
+  console.log(devices);
+  
+
 
   const IsEmpty = (value) => {
     return value.length <= 0;
@@ -125,9 +130,8 @@ export default function EditAlertForm({ alert, onCancel, onSave, user }) {
           </div>
           <div className={classes.control}>
             <label htmlFor="name">Device</label>
-            <select disabled>
-              <option value="41333">Principal</option>
-              <option value="41335">Secundario</option>
+            <select disabled  value={alert.idBoard}>
+              <option value={selectedDevice.idBoard}>{selectedDevice.name}</option>
             </select>
           </div>
         </div>
