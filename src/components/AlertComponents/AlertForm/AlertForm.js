@@ -67,7 +67,7 @@ export default function AlertForm(props) {
       ? currentUser.email
       : contactChannelHook.value === "TELEPHONE"
       ? currentUser.telephone
-      : currentUser.discord;
+      : currentUser.discordUser;
   let VolumeAlert = {
     idBoard: deviceHook.value,
     name: nameHook.value,
@@ -285,10 +285,10 @@ export default function AlertForm(props) {
               >
                 {currentUser.email && <option value="EMAIL">Email</option>}
                 {currentUser.telephone && (
-                  <option value="SMS">Telephone</option>
+                  <option value="SMS">SMS</option>
                 )}
-                {currentUser.discord && (
-                  <option value="TELEGRAM">Discord</option>
+                {currentUser.discordUser && (
+                  <option value="TELEGRAM">Telegram</option>
                 )}
               </select>
             </div>

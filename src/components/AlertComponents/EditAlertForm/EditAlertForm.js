@@ -11,6 +11,7 @@ export default function EditAlertForm({ alert, onCancel, onSave, user,devices })
   console.log(alert);
   console.log(devices);
   console.log(selectedDevice);
+  console.log(currentUser);
   
 
   const IsEmpty = (value) => {
@@ -36,7 +37,6 @@ export default function EditAlertForm({ alert, onCancel, onSave, user,devices })
     endString = `${alert.range.end.hour}:${alert.range.end.minute}`;
   }
 
-  // const nameHook = useInput(IsEmpty);
   const limitHook = useInput(biggerThanZero, alert.limit);
   const contactChannelHook = useInput(IsEmpty, alert.contactChannel.type);
   const periodQuantityHook = useInput(inRange999, alert.periodQuantity);
@@ -45,9 +45,9 @@ export default function EditAlertForm({ alert, onCancel, onSave, user,devices })
   let userContact =
     contactChannelHook.value === "EMAIL"
       ? currentUser.email
-      : contactChannelHook.value === "TELEPHONE"
+      : contactChannelHook.value === "SMS"
       ? currentUser.telephone
-      : currentUser.discord;
+      : currentUser.discordUser;
 
   let formIsInvalid = false;
 
@@ -75,7 +75,7 @@ export default function EditAlertForm({ alert, onCancel, onSave, user,devices })
     limit: limitHook.value,
     periodQuantity: periodQuantityHook.value,
     periodType: periodTypeHook.value,
-    contactChannel: { type: "TELEPHONE", contact: "1234567890" },
+    contactChannel: { type: contactChannelHook.value, contact: userContact },
   };
   let ScheduleAlert = {
     type: "SCHEDULE",
@@ -91,7 +91,7 @@ export default function EditAlertForm({ alert, onCancel, onSave, user,devices })
         minute: scheduleHook.secondValue.split(":")[1],
       },
     },
-    contactChannel: { type: "TELEPHONE", contact: "1234567890" },
+    contactChannel: { type: contactChannelHook.value, contact: userContact },
   };
 
   let TimeAlert = {
@@ -231,9 +231,9 @@ export default function EditAlertForm({ alert, onCancel, onSave, user,devices })
             >
               {currentUser.email && <option value="EMAIL">Email</option>}
               {currentUser.telephone && (
-                <option value="TELEPHONE">Telephone</option>
+                <option value="SMS">SMS</option>
               )}
-              {currentUser.discord && <option value="DISCORD">Discord</option>}
+              {currentUser.discordUser && <option value="TELEGRAM">Telegram</option>}
             </select>
           </div>
           <div className={classes.control}>
