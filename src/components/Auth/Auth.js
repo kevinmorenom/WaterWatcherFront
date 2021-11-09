@@ -105,11 +105,11 @@ export default function Auth() {
   };
   return (
     <div className={classes.main}>
-      <img
+      {/* <img
         className={classes.logo}
         src="http://www.crazyleafdesign.com/blog/wp-content/uploads/2016/10/eyecon_1x.png"
         alt="Paris"
-      />
+      /> */}
       <section className={classes.auth}>
         <h1>{isLogin ? "Login" : "Sign Up"}</h1>
         {authError && <div className={classes.invalidCredentials}>Invalid Credentials</div>}

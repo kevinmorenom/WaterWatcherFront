@@ -25,10 +25,10 @@ export default function YamlModal(props) {
   props.devices.forEach((device) => {
     YAMLdraft += `
   - platform: rest 
-  resource: https://waterwatcher-back.herokuapp.com/api/data/lastData 
+    resource: https://waterwatcher-back.herokuapp.com/api/data/lastData 
     headers:
-    authorization:  ${localStorage.getItem("token")}
-    idboard: ${device.idBoard}
+      authorization:  ${localStorage.getItem("token")}
+      idboard: ${device.idBoard}
     name: ${device.name}
     unit_of_measurement: L
     value_template: "{{ value_json.data.volume}}"`;
