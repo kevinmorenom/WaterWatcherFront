@@ -117,6 +117,7 @@ export default function Alerts() {
   }, []);
 
   async function postAlert(newAlert) {
+    console.log(newAlert);
     try {
       const response = await fetch(
         `${process.env.REACT_APP_BACKEND_URL}/alerts`,

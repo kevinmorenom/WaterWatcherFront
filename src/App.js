@@ -20,9 +20,6 @@ function App() {
         {isLoggedIn && (
           <>
             {" "}
-            {/* <Route path="/home" exact>
-              <MainPage></MainPage>
-            </Route> */}
             <Route path="/devices">
               <Devices></Devices>
             </Route>

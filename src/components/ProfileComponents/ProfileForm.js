@@ -17,8 +17,6 @@ export default function ProfileForm({ user, updateUser }) {
     event.preventDefault();
     let userData = {
       name: nameHook.value.trim(),
-      // password:
-      //   passwordHook.value.length > 0 ? passwordHook.value : user.password,
       telephone: telephoneHook.value,
       discordUser: telegramHook.value,
     };
@@ -62,17 +60,6 @@ export default function ProfileForm({ user, updateUser }) {
               value={user.email}
             />
           </div>
-          {/* <div className={classes.control}>
-            <label htmlFor="name">Password</label>
-            <input
-              value={passwordHook.value}
-              onChange={passwordHook.ChangeHandler}
-              onBlur={passwordHook.BlurHandler}
-              type="password"
-              id="password"
-              required
-            />
-          </div> */}
 
           <div className={classes.control}>
             <label htmlFor="name">Telephone</label>

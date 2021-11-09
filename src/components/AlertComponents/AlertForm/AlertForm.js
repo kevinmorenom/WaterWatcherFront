@@ -69,7 +69,7 @@ export default function AlertForm(props) {
       ? currentUser.telephone
       : currentUser.discordUser;
   let VolumeAlert = {
-    idBoard: deviceHook.value,
+    idBoard: deviceHook.value.idBoard,
     name: nameHook.value,
     type: "volume",
     limit: limitHook.value,
@@ -78,7 +78,7 @@ export default function AlertForm(props) {
     contactChannel: { type: contactChannelHook.value, contact: userContact },
   };
   let ScheduleAlert = {
-    idBoard: deviceHook.value,
+    idBoard: deviceHook.value.idBoard,
     name: nameHook.value,
     type: "schedule",
     limit: limitHook.value,
@@ -95,7 +95,7 @@ export default function AlertForm(props) {
     contactChannel: { type: contactChannelHook.value, contact: userContact },
   };
   let TimeAlert = {
-    idBoard: deviceHook.value,
+    idBoard: deviceHook.value.idBoard,
     name: nameHook.value,
     type: "time",
     periodQuantity: periodQuantityHook.value,

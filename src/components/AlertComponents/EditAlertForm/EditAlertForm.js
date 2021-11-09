@@ -248,7 +248,6 @@ export default function EditAlertForm({ alert, onCancel, onSave, user,devices })
           </div>
         </div>
       </form>
-      {/* </section> */}
     </div>
   );
 }
