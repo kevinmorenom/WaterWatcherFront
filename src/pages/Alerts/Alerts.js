@@ -26,7 +26,6 @@ export default function Alerts() {
 
   const showEditModal = (alertID) => {
     setEditAlert(alertID);
-    console.log(alertID);
   };
 
   const dismissEditModal = () => {

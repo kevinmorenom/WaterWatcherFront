@@ -8,11 +8,7 @@ export default function EditAlertForm({ alert, onCancel, onSave, user,devices })
   const selectedDevice=devices.find(element=>element._id===alert.idBoard);
   
   const currentUser = user;
-  console.log(alert);
-  console.log(devices);
-  console.log(selectedDevice);
-  console.log(currentUser);
-  
+ 
 
   const IsEmpty = (value) => {
     return value.length <= 0;
