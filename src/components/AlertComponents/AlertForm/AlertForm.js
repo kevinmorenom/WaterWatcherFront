@@ -65,7 +65,7 @@ export default function AlertForm(props) {
   let userContact =
     contactChannelHook.value === "EMAIL"
       ? currentUser.email
-      : contactChannelHook.value === "TELEPHONE"
+      : contactChannelHook.value === "SMS"
       ? currentUser.telephone
       : currentUser.discordUser;
   let VolumeAlert = {
