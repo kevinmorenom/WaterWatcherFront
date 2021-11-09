@@ -5,7 +5,7 @@ import useDoubleInput from "../../../hooks/use-input-double";
 
 export default function EditAlertForm({ alert, onCancel, onSave, user,devices }) {
   const alertType = alert.type.toUpperCase();
-  const selectedDevice=devices.find(element=>element._id===alert.idBoard);
+  const selectedDevice=devices.find(element=>element.idBoard===alert.idBoard);
   
   const currentUser = user;
  
