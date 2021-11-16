@@ -43,7 +43,7 @@ export default function YamlModal(props) {
       <>
         <Modal title="HomeAssitant YAML script" onCancel={props.onCancel}>
           <h2>Copy this to HomeAssistant to visualize your data</h2>
-          <button style={buttonstyle} onClick={copyHandler}>Copy <FaClone></FaClone></button>
+          {/* <button style={buttonstyle} onClick={copyHandler}>Copy <FaClone></FaClone></button> */}
           {copied && <p style={confirmCopyStyle}>Copied to clipboard!</p>}
           <textarea readOnly value={YAMLdraft}></textarea>
         </Modal>
